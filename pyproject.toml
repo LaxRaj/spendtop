@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spendtop"
+version = "0.1.0"
+description = "A local-first terminal dashboard for AI coding tool spend"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [{ name = "Lakshyaraj Bhati", email = "lbhati2804@gmail.com" }]
+keywords = ["ai", "spend", "tui", "terminal", "dashboard"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Terminals",
+]
+dependencies = [
+    "textual>=0.89.1",
+    "typer>=0.15.4",
+    "httpx>=0.28.1",
+    "keyring>=25.6.0",
+]
+
+[project.scripts]
+spendtop = "spendtop.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/LaxRaj/spendtop"
+Repository = "https://github.com/LaxRaj/spendtop"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/spendtop"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.13",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=0.24.0",
+    "pre-commit>=4.2.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

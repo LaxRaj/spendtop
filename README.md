@@ -2,7 +2,7 @@
 
 > A local-first terminal dashboard that shows what your AI coding tools actually cost — and ties that spend to the code your team ships.
 
-![spendtop TUI screenshot](screenshot.svg)
+![spendtop demo](demo.gif)
 
 ```
 uvx spendtop

@@ -14,17 +14,24 @@ log = logging.getLogger(__name__)
 
 _BASE = "https://api.openai.com"
 
-# Pattern to strip token-type suffixes from OpenAI line_item strings.
-# e.g. "gpt-4o-2024-11-20 Input Tokens" → "gpt-4o-2024-11-20"
-_LINE_ITEM_RE = re.compile(
-    r"\s+(Input|Output|Completion|Cached|Audio|Image|Embedding)\s+", re.IGNORECASE
+# Strip service-tier prefix ("priority | ") and token-type suffix (", input" / " Input Tokens")
+_TIER_PREFIX_RE = re.compile(r"^[^|]+\|\s*")
+_TOKEN_SUFFIX_RE = re.compile(
+    r",?\s*(input|output|completion|cached|audio|image|embedding)\s*(tokens?)?$",
+    re.IGNORECASE,
 )
+
+
+_CACHED_SUFFIX_RE = re.compile(r",?\s*cached$", re.IGNORECASE)
 
 
 def _model_from_line_item(line_item: str | None) -> str | None:
     if not line_item:
         return None
-    return _LINE_ITEM_RE.split(line_item)[0].strip() or None
+    s = _TIER_PREFIX_RE.sub("", line_item).strip()
+    s = _TOKEN_SUFFIX_RE.sub("", s).strip()
+    s = _CACHED_SUFFIX_RE.sub("", s).strip()
+    return s or None
 
 
 class OpenAIConnector(SpendConnector):
